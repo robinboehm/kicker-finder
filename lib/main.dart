@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'locations/location-list.screen.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -9,7 +11,7 @@ class MyApp extends StatelessWidget {
       title: 'Kicker Finder',
       initialRoute: '/',
       routes: {
-        '/': (context) => MyHomePage(title: 'Kicker Finder')
+        '/': (context) => LocationList()
       },
     );
   }
