@@ -14,38 +14,57 @@ class LocationList extends StatelessWidget {
       appBar: AppBar(
         title: Text('Kicker Finder'),
       ),
-      body: Center(
-        child: FutureBuilder<List<Location>>(
-          future: fetchLocations(http.Client()),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(snapshot.data[index].name),
-                    subtitle: Text('${snapshot.data[index].city} - ${snapshot.data[index].table}'),
-                    leading: Icon(Icons.home),
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        '/location',
-                        arguments: LocationDetailArguments(
-                          '${snapshot.data[index].id}',
-                        ),
-                      );
-                    },
-                  );
-                },
-              );
-              // return Text(snapshot.data.title);
-            } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
-            }
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                onChanged: (value) {},
+                decoration: InputDecoration(
+                    labelText: "Search",
+                    hintText: "Search",
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25.0)))),
+              ),
+            ),
+            Expanded(
+              child: FutureBuilder<List<Location>>(
+                future: fetchLocations(http.Client()),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(snapshot.data[index].name),
+                          subtitle: Text(
+                              '${snapshot.data[index].city} - ${snapshot.data[index].table}'),
+                          leading: Icon(Icons.home),
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              '/location',
+                              arguments: LocationDetailArguments(
+                                '${snapshot.data[index].id}',
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    );
+                    // return Text(snapshot.data.title);
+                  } else if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
 
-            // By default, show a loading spinner
-            return CircularProgressIndicator();
-          },
+                  // By default, show a loading spinner
+                  return CircularProgressIndicator();
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
