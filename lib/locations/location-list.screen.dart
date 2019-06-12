@@ -24,7 +24,8 @@ class LocationList extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return ListTile(
                     title: Text(snapshot.data[index].name),
-                    subtitle: Text(snapshot.data[index].city),
+                    subtitle: Text('${snapshot.data[index].city} - ${snapshot.data[index].table}'),
+                    leading: FlutterLogo(),
                     onTap: () {
                       Navigator.pushNamed(
                         context,
