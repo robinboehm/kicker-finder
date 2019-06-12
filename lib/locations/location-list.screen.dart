@@ -23,7 +23,8 @@ class LocationList extends StatelessWidget {
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text('${snapshot.data[index].name}'),
+                    title: Text(snapshot.data[index].name),
+                    subtitle: Text(snapshot.data[index].city),
                     onTap: () {
                       Navigator.pushNamed(
                         context,
