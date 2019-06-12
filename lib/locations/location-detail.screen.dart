@@ -1,40 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'book.service.dart';
+import 'location.service.dart';
 
-class BookDetailArguments {
-  final String isbn;
+class LocationDetailArguments {
+  final String id;
 
-  BookDetailArguments(this.isbn);
+  LocationDetailArguments(this.id);
 }
 
-class BookDetail extends StatelessWidget {
+class LocationDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final BookDetailArguments args = ModalRoute.of(context).settings.arguments;
+    final LocationDetailArguments args = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Book Details'),
+        title: Text('Location Details'),
       ),
       body: Padding(
           padding: EdgeInsets.all(16.0),
           child: Center(
-            child: FutureBuilder<Book>(
-              future: fetchBook(http.Client(), args.isbn),
+            child: FutureBuilder<Location>(
+              future: fetchLocation(http.Client(), args.id),
               builder: (context, snapshot) {
-                final Book book = snapshot.data;
+                final Location location = snapshot.data;
                 if (snapshot.hasData) {
                   return Container(
                     child: Column(
                       children: <Widget>[
-                        Text(book.title),
-                        Text(book.subtitle),
-                        Text(book.abstract),
-                        Text(book.isbn),
-                        Text('Pages:${book.numPages}'),
-                        Text(book.author),
+                        Text(location.name),
+                        Text(location.city),
+                        Text(location.table),
                       ],
                     ),
                   );

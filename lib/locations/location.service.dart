@@ -24,7 +24,7 @@ List<Location> parseLocations(String responseBody) {
 }
 
 Future<Location> fetchLocation(http.Client client, String id) async {
-  final response = await http.get('http://localhost:4730/locations/' + id);
+  final response = await http.get('http://localhost:3000/locations/' + id);
 
   if (response.statusCode == 200) {
     // If the call to the server was successful, parse the JSON
