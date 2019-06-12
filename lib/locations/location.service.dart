@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
 Future<List<Location>> fetchLocations(http.Client client) async {
-  final response = await http.get('http://localhost:4730/locations');
+  final response = await http.get('http://localhost:3000/locations');
 
   if (response.statusCode == 200) {
     // If the call to the server was successful, parse the JSON
@@ -35,6 +35,22 @@ Future<Location> fetchLocation(http.Client client, String id) async {
   }
 }
 
+class Loc {
+  String long;
+  String lat;
+
+  Loc({this.long, this.lat});
+
+  factory Loc.fromJson(Map<String, dynamic> json) {
+    return Loc(long: json['long'], lat: json['lat']);
+  }
+
+  Map<String, dynamic> toJson() => {
+        'long': long,
+        'lat': lat,
+      };
+}
+
 class Location {
   String id;
   String name;
@@ -42,7 +58,7 @@ class Location {
   String plz;
   String city;
   String subLocality;
-  String loc;
+  Loc loc;
   String homepage;
   String openingTimes;
   String table;
@@ -76,7 +92,7 @@ class Location {
       plz: json['plz'],
       city: json['city'],
       subLocality: json['subLocality'],
-      loc: json['loc'],
+      loc: Loc.fromJson(json['loc']),
       homepage: json['homepage'],
       openingTimes: json['openingTimes'],
       table: json['table'],
@@ -94,7 +110,7 @@ class Location {
         'plz': plz,
         'city': city,
         'subLocality': subLocality,
-        'loc': loc,
+        'loc': loc.toJson(),
         'homepage': homepage,
         'openingTimes': openingTimes,
         'table': table,
@@ -106,7 +122,7 @@ class Location {
 
   save() async {
     final response = await http.Client()
-        .post('http://localhost:4730/locations', body: toJson());
+        .post('http://localhost:3000/locations', body: toJson());
 
     if (response.statusCode == 201) {
       // If the call to the server was successful, parse the JSON
