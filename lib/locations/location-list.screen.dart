@@ -5,8 +5,20 @@ import 'package:http/http.dart' as http;
 import 'location-detail.screen.dart';
 import 'location.service.dart';
 
-class LocationList extends StatelessWidget {
+class LocationList extends StatefulWidget {
   LocationList({Key key}) : super(key: key);
+
+  @override
+  _LocationSearchState createState() => new _LocationSearchState();
+}
+
+class _LocationSearchState extends State<LocationList> {
+  TextEditingController editingController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
