@@ -62,7 +62,7 @@ class _LocationSearchState extends State<LocationList> {
           title: Text(_items[index].name),
           subtitle: Text('${_items[index].city} - ${_items[index].table}'),
           leading: Icon(Icons.home),
-          onTap: () {_navigateToLocation(_items[index].id);},
+          onTap: () {_navigateToLocation(_items[index]);},
         );
       },
     );
@@ -100,11 +100,11 @@ class _LocationSearchState extends State<LocationList> {
     );
   }
 
-  _navigateToLocation(String id) {
+  _navigateToLocation(Location location) {
     Navigator.pushNamed(
       context,
       '/location',
-      arguments: LocationDetailArguments(id),
+      arguments: LocationDetailArguments(location),
     );
   }
 }
