@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'package:map_view/map_view.dart';
 
+import 'flexibel-app-bar.widget.dart';
+
 class StaticMapWidget extends StatelessWidget {
   final double long;
   final double lat;
+  final String title;
 
-  StaticMapWidget({Key key, this.long, this.lat}) : super(key: key);
+  StaticMapWidget({Key key, this.long, this.lat, this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +21,6 @@ class StaticMapWidget extends StatelessWidget {
         new Location(lat, long), 16,
         width: 900, height: 400, mapType: StaticMapViewType.roadmap);
 
-    return InkWell(
-      child: new Center(
-        child: new Image.network(staticMapUri.toString()),
-      ),
-    );
+    return FlexibleAppBar(title, staticMapUri.toString());
   }
 }

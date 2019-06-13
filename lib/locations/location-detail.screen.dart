@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kicker_finder/widgets/flexibel-app-bar.widget.dart';
 import 'package:kicker_finder/widgets/static-map.widget.dart';
 
 import 'package:map_view/map_view.dart';
@@ -22,20 +23,28 @@ class LocationDetail extends StatelessWidget {
       appBar: AppBar(
         title: Text(location.name),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Center(
-          child: Container(
-            child: Column(
-              children: <Widget>[
-                StaticMapWidget(lat: double.parse(location.loc.lat), long: double.parse(location.loc.long)),
-                Text(location.name),
-                Text(location.city),
-                Text(location.table),
-              ],
-            ),
-          ),
-        ),
+      body: CustomScrollView(
+        slivers: <Widget>[
+          StaticMapWidget(
+              title: location.name,
+              lat: double.parse(location.loc.lat),
+              long: double.parse(location.loc.long)),
+          SliverList(
+            delegate: SliverChildListDelegate([
+              Center(
+                child: Container(
+                  child: Column(
+                    children: <Widget>[
+                      Text(location.name),
+                      Text(location.city),
+                      Text(location.table),
+                    ],
+                  ),
+                ),
+              ),
+            ]),
+          )
+        ],
       ),
     );
   }
