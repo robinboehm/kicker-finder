@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kicker_finder/widgets/contact-category-item.widget.dart';
+import 'package:kicker_finder/widgets/contact-category.widget.dart';
 import 'package:kicker_finder/widgets/flexibel-app-bar.widget.dart';
 import 'package:kicker_finder/widgets/static-map.widget.dart';
 
@@ -13,6 +15,50 @@ class LocationDetailArguments {
 }
 
 class LocationDetail extends StatelessWidget {
+
+ContactCategory _buildAdressCategory(KickerLocation location) {
+    return ContactCategory(
+      icon: Icons.pin_drop,
+      children:[
+        ContactCategoryItem(
+                          icon: Icons.map,
+                          lines: <String>[
+                            location.street,
+                            '${location.plz} ${location.city}'
+                          ],
+                        )
+      ]
+    );
+  }
+
+  ContactCategory _buildContactCategory(KickerLocation location) {
+    return ContactCategory(
+      icon: Icons.contacts,
+      children:[
+        ContactCategoryItem(
+                          icon: Icons.web,
+                          lines: <String>[
+                            location.homepage
+                          ],
+                        )
+      ]
+    );
+  }
+
+  ContactCategory _buildTablesCategory(KickerLocation location) {
+    return ContactCategory(
+      icon: Icons.games,
+      children:[
+        ContactCategoryItem(
+                          icon: Icons.toys,
+                          lines: <String>[
+                            location.table
+                          ],
+                        )
+      ]
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final LocationDetailArguments args =
@@ -35,9 +81,9 @@ class LocationDetail extends StatelessWidget {
                 child: Container(
                   child: Column(
                     children: <Widget>[
-                      Text(location.name),
-                      Text(location.city),
-                      Text(location.table),
+                      _buildAdressCategory(location),
+                      _buildContactCategory(location),
+                      _buildTablesCategory(location),
                     ],
                   ),
                 ),
