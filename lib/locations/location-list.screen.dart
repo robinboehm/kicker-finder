@@ -37,25 +37,23 @@ class _LocationSearchState extends State<LocationList> {
   }
 
   void filterSearchResults(String query) {
-    debugPrint("CustomState(${query}).build executed");
+    List<Location> tempFilterList = new List<Location>();
     if (query.isNotEmpty) {
-      setState(() {
-        items.clear();
-        originalItems.forEach((item) {
-          if (item.name.contains(query) ||
-              item.city.contains(query) ||
-              item.table.contains(query)) {
-            items.add(item);
-          }
-        });
+      originalItems.forEach((item) {
+        if (item.name.contains(query) ||
+            item.city.contains(query) ||
+            item.table.contains(query)) {
+          tempFilterList.add(item);
+        }
       });
-      return;
     } else {
-      setState(() {
-        items.clear();
-        items.addAll(originalItems);
-      });
+      tempFilterList.addAll(originalItems);
     }
+
+    setState(() {
+      items.clear();
+      items.addAll(tempFilterList);
+    });
   }
 
   Widget buildList() {
