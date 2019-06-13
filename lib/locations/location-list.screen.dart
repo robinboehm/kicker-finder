@@ -15,31 +15,29 @@ class LocationList extends StatefulWidget {
 class _LocationSearchState extends State<LocationList> {
   TextEditingController editingController = TextEditingController();
 
-  List<Location> items = new List<Location>();
-  List<Location> originalItems = new List<Location>();
+  List<Location> _items = new List<Location>();
+  List<Location> _originalItems = new List<Location>();
 
   Future<Null> getAllLocations() async {
     debugPrint("Fetch locations");
     final locations = await fetchLocations(http.Client());
 
     setState(() {
-      debugPrint("Locations fetched");
-      items.addAll(locations);
-      originalItems.addAll(locations);
+      _items.addAll(locations);
+      _originalItems.addAll(locations);
     });
   }
 
   @override
   void initState() {
-    debugPrint("init state");
     super.initState();
     getAllLocations();
   }
 
-  void filterSearchResults(String query) {
+  void _filterSearchResults(String query) {
     List<Location> tempFilterList = new List<Location>();
     if (query.isNotEmpty) {
-      originalItems.forEach((item) {
+      _originalItems.forEach((item) {
         if (item.name.contains(query) ||
             item.city.contains(query) ||
             item.table.contains(query)) {
@@ -47,36 +45,27 @@ class _LocationSearchState extends State<LocationList> {
         }
       });
     } else {
-      tempFilterList.addAll(originalItems);
+      tempFilterList.addAll(_originalItems);
     }
 
     setState(() {
-      items.clear();
-      items.addAll(tempFilterList);
+      _items.clear();
+      _items.addAll(tempFilterList);
     });
   }
 
-  Widget buildList() {
+  Widget _buildList() {
     return ListView.builder(
-      itemCount: items.length,
+      itemCount: _items.length,
       itemBuilder: (context, index) {
         return ListTile(
-          title: Text(items[index].name),
-          subtitle: Text('${items[index].city} - ${items[index].table}'),
+          title: Text(_items[index].name),
+          subtitle: Text('${_items[index].city} - ${_items[index].table}'),
           leading: Icon(Icons.home),
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              '/location',
-              arguments: LocationDetailArguments(
-                '${items[index].id}',
-              ),
-            );
-          },
+          onTap: () {_navigateToLocation(_items[index].id);},
         );
       },
     );
-    // return Text(snapshot.data.title);
   }
 
   @override
@@ -92,7 +81,7 @@ class _LocationSearchState extends State<LocationList> {
               padding: const EdgeInsets.all(8.0),
               child: TextField(
                 onChanged: (value) {
-                  filterSearchResults(value);
+                  _filterSearchResults(value);
                 },
                 decoration: InputDecoration(
                     labelText: "Search",
@@ -103,11 +92,19 @@ class _LocationSearchState extends State<LocationList> {
               ),
             ),
             Expanded(
-              child: buildList(),
+              child: _buildList(),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  _navigateToLocation(String id) {
+    Navigator.pushNamed(
+      context,
+      '/location',
+      arguments: LocationDetailArguments(id),
     );
   }
 }
