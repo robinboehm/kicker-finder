@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
-Future<List<Location>> fetchLocations(http.Client client) async {
+Future<List<KickerLocation>> fetchLocations(http.Client client) async {
   final response = await http.get('http://localhost:3000/locations');
 
   if (response.statusCode == 200) {
@@ -17,18 +17,18 @@ Future<List<Location>> fetchLocations(http.Client client) async {
 }
 
 // A function that converts a response body into a List<Location>
-List<Location> parseLocations(String responseBody) {
+List<KickerLocation> parseLocations(String responseBody) {
   final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
 
-  return parsed.map<Location>((json) => Location.fromJson(json)).toList();
+  return parsed.map<KickerLocation>((json) => KickerLocation.fromJson(json)).toList();
 }
 
-Future<Location> fetchLocation(http.Client client, String id) async {
+Future<KickerLocation> fetchLocation(http.Client client, String id) async {
   final response = await http.get('http://localhost:3000/locations/' + id);
 
   if (response.statusCode == 200) {
     // If the call to the server was successful, parse the JSON
-    return Location.fromJson(json.decode(response.body));
+    return KickerLocation.fromJson(json.decode(response.body));
   } else {
     // If that call was not successful, throw an error.
     throw Exception('Failed to load location.');
@@ -51,7 +51,7 @@ class Loc {
       };
 }
 
-class Location {
+class KickerLocation {
   String id;
   String name;
   String street;
@@ -67,7 +67,7 @@ class Location {
   String playingTimes;
   String skill;
 
-  Location({
+  KickerLocation({
     this.id,
     this.name,
     this.street,
@@ -84,8 +84,8 @@ class Location {
     this.skill,
   });
 
-  factory Location.fromJson(Map<String, dynamic> json) {
-    return Location(
+  factory KickerLocation.fromJson(Map<String, dynamic> json) {
+    return KickerLocation(
       id: json['id'],
       name: json['name'],
       street: json['street'],

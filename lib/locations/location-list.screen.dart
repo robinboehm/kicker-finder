@@ -15,11 +15,10 @@ class LocationList extends StatefulWidget {
 class _LocationSearchState extends State<LocationList> {
   TextEditingController editingController = TextEditingController();
 
-  List<Location> _items = new List<Location>();
-  List<Location> _originalItems = new List<Location>();
+  List<KickerLocation> _items = new List<KickerLocation>();
+  List<KickerLocation> _originalItems = new List<KickerLocation>();
 
   Future<Null> getAllLocations() async {
-    debugPrint("Fetch locations");
     final locations = await fetchLocations(http.Client());
 
     setState(() {
@@ -35,7 +34,7 @@ class _LocationSearchState extends State<LocationList> {
   }
 
   void _filterSearchResults(String query) {
-    List<Location> tempFilterList = new List<Location>();
+    List<KickerLocation> tempFilterList = new List<KickerLocation>();
     if (query.isNotEmpty) {
       _originalItems.forEach((item) {
         if (item.name.contains(query) ||
@@ -100,7 +99,7 @@ class _LocationSearchState extends State<LocationList> {
     );
   }
 
-  _navigateToLocation(Location location) {
+  _navigateToLocation(KickerLocation location) {
     Navigator.pushNamed(
       context,
       '/location',

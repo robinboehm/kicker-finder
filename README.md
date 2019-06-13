@@ -14,3 +14,9 @@ I've just tested this under MacOSX for now.
 
     open -a Simulator
     flutter run
+
+
+## Known problems
+
+### Compilation of map_view fails
+    https://github.com/apptreesoftware/flutter_google_map_view/issues/24#issuecomment-499295873
