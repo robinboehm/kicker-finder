@@ -15,9 +15,70 @@ class LocationList extends StatefulWidget {
 class _LocationSearchState extends State<LocationList> {
   TextEditingController editingController = TextEditingController();
 
+  List<Location> items = new List<Location>();
+  List<Location> originalItems = new List<Location>();
+
+  Future<Null> getAllLocations() async {
+    debugPrint("Fetch locations");
+    final locations = await fetchLocations(http.Client());
+
+    setState(() {
+      debugPrint("Locations fetched");
+      items.addAll(locations);
+      originalItems.addAll(locations);
+    });
+  }
+
   @override
   void initState() {
+    debugPrint("init state");
     super.initState();
+    getAllLocations();
+  }
+
+  void filterSearchResults(String query) {
+    debugPrint("CustomState(${query}).build executed");
+    if (query.isNotEmpty) {
+      setState(() {
+        items.clear();
+        originalItems.forEach((item) {
+          if (item.name.contains(query) ||
+              item.city.contains(query) ||
+              item.table.contains(query)) {
+            items.add(item);
+          }
+        });
+      });
+      return;
+    } else {
+      setState(() {
+        items.clear();
+        items.addAll(originalItems);
+      });
+    }
+  }
+
+  Widget buildList() {
+    return ListView.builder(
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(items[index].name),
+          subtitle: Text('${items[index].city} - ${items[index].table}'),
+          leading: Icon(Icons.home),
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              '/location',
+              arguments: LocationDetailArguments(
+                '${items[index].id}',
+              ),
+            );
+          },
+        );
+      },
+    );
+    // return Text(snapshot.data.title);
   }
 
   @override
@@ -32,7 +93,9 @@ class _LocationSearchState extends State<LocationList> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
-                onChanged: (value) {},
+                onChanged: (value) {
+                  filterSearchResults(value);
+                },
                 decoration: InputDecoration(
                     labelText: "Search",
                     hintText: "Search",
@@ -42,39 +105,7 @@ class _LocationSearchState extends State<LocationList> {
               ),
             ),
             Expanded(
-              child: FutureBuilder<List<Location>>(
-                future: fetchLocations(http.Client()),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(snapshot.data[index].name),
-                          subtitle: Text(
-                              '${snapshot.data[index].city} - ${snapshot.data[index].table}'),
-                          leading: Icon(Icons.home),
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              '/location',
-                              arguments: LocationDetailArguments(
-                                '${snapshot.data[index].id}',
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    );
-                    // return Text(snapshot.data.title);
-                  } else if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
-                  }
-
-                  // By default, show a loading spinner
-                  return CircularProgressIndicator();
-                },
-              ),
+              child: buildList(),
             ),
           ],
         ),
